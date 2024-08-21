@@ -1,0 +1,292 @@
+import time
+from datetime import datetime
+
+from selenium.webdriver.common.by import By
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from openpyxl import load_workbook
+
+options=webdriver.ChromeOptions()
+options.add_experimental_option("detach",True)
+driver=webdriver.Chrome(options=options)
+
+
+workbook=load_workbook("D:\Python_Installer\WebNFP.xlsx")
+sheet=workbook['NFP']
+
+#current_day = datetime.now().day
+
+
+NFP_Name= sheet.cell(row=2,column=1).value
+NFP_Phone=sheet.cell(row=2,column=2).value
+Zip_Code=sheet.cell(row=2,column=3).value
+Donation_Link=sheet.cell(row=2,column=4).value
+Description=sheet.cell(row=2,column=5).value
+Register_By=sheet.cell(row=2,column=6).value
+FarEver_Membership=sheet.cell(row=2,column=7).value
+City=sheet.cell(row=2,column=8).value
+Address=sheet.cell(row=2,column=9).value
+Program_Name=sheet.cell(row=2,column=10).value
+Program_Latitude=sheet.cell(row=2,column=11).value
+Program_Longitude=sheet.cell(row=2,column=12).value
+#Services=sheet.cell(row=2,column=13).value
+Main_Function_Specifics=sheet.cell(row=2,column=14).value
+Name=sheet.cell(row=2,column=15).value
+Email_ID=sheet.cell(row=2,column=16).value
+Contact_Cell=sheet.cell(row=2,column=17).value
+
+Services=['Housing','Food']
+days=['Mon','Tue']
+Start_time=["09:00 AM"]
+End_time=["10:00 PM"]
+
+
+
+try:
+    driver.get("http://dlscloudservices.com/#/registration")
+
+except RuntimeError as e:
+    print("Element not found",e)
+except Exception as ex:
+    print("Element is not hit",ex)
+
+def AddNFP():
+    Organisation=driver.find_element(By.XPATH,"//input[@placeholder='Enter NFP Name ']").send_keys(NFP_Name)
+    Phone_Number=driver.find_element(By.XPATH,"//input[@placeholder='Enter NFP Phone']").send_keys(NFP_Phone)
+    zipcode=driver.find_element(By.XPATH,"//input[@placeholder='Zip Code']").send_keys(Zip_Code)
+    donationlink=driver.find_element(By.XPATH,"//input[@placeholder='Enter Donation Link']").send_keys(Donation_Link)
+    description=driver.find_element(By.XPATH,"//input[@placeholder='Enter Description']").send_keys(Description)
+    Regestiredby=driver.find_element(By.XPATH,"//input[@placeholder='Enter Register By']").send_keys(Register_By)
+    #Memebership=driver.find_element(By.XPATH,"//input[@placeholder='Select Membership Since']").click()
+    #dateselection=driver.find_element(By.XPATH,"//div[@class='calendar']").click()
+    city=driver.find_element(By.XPATH,"//input[@placeholder='Enter City']").send_keys(City)
+    address=driver.find_element(By.XPATH,"//input[@placeholder='Enter Address']").send_keys(Address)
+    Add_Location=driver.find_element(By.XPATH,"//button[contains(text(),'Add Location')]").click()
+    print("Sucessfully Added Location..")
+    selctloaction=driver.find_element(By.XPATH,"//span[contains(text(),'Select Location')]").click()
+    sublocation=driver.find_element(By.XPATH,"//div[contains(text(),'ID: loc-1')]").click()
+    programname=driver.find_element(By.XPATH,"//input[@placeholder='Enter Program Name']").send_keys(Program_Name)
+    lattitude=driver.find_element(By.XPATH,"//input[@placeholder='Enter Latitude']").send_keys(Program_Latitude)
+    longitude=driver.find_element(By.XPATH,"//input[@placeholder='Enter Longitude']").send_keys(Program_Longitude)
+    for items in Services:
+        time.sleep(10)
+
+        if items=="Housing":
+            driver.find_element(By.XPATH,"//span[contains(text(),'Housing')]").click()
+            time.sleep(2)
+        elif items=="Food":
+            driver.find_element(By.XPATH,"//span[contains(text(),'Food')]").click()
+            time.sleep(2)
+        elif items=="Medical":
+            driver.find_element(By.XPATH,"//span[contains(text(),'Medical')]").click()
+            time.sleep(2)
+        elif items=="Clothes":
+            driver.find_element(By.XPATH,"//span[contains(text(),'Clothes')]").click()
+            time.sleep(2)
+        elif items=="Jobs & Training":
+            driver.find_element(By.XPATH,"//span[contains(text(),'Jobs & Training')]").click()
+            time.sleep(2)
+        elif items=="Services":
+            driver.find_element(By.XPATH,"//span[contains(text(),'Services')]").click()
+            time.sleep(2)
+        elif items=="Hygiene":
+            driver.find_element(By.XPATH,"//span[contains(text(),'Hygiene')]").click()
+            time.sleep(2)
+        elif items=="Others":
+            driver.find_element(By.XPATH,"//span[contains(text(),'Others')]").click()
+            time.sleep(2)
+        else:
+            print("Please select the Services..!!!")
+
+    operating_hrs=driver.find_element(By.XPATH,"//span[@class='selected-time-text-ci']").click()
+    time.sleep(2)
+    day=driver.find_element(By.XPATH,"(//span[contains(text(),'Select Day')])[2]").click()
+
+    for item in days:
+
+        if item=="Mon":
+            driver.find_element(By.XPATH,"//div[contains(text(),'Mon')]").click()
+            time.sleep(3)
+            start_time=driver.find_element(By.XPATH,"(//span[contains(text(),'HH')])[1]").click()
+        #if Start_time=='01 AM':
+            driver.find_element(By.XPATH,"(//div[contains(text(),'09')])").click()
+            time.sleep(3)
+            driver.find_element(By.XPATH,"(//span[contains(text(),'MM')])[1]").click()
+            driver.find_element(By.XPATH,"(//div[contains(text(),'00')])").click()
+                #driver.find_element(By.XPATH,"(//span[contains(text(),'AM')])").click()
+            end_time = driver.find_element(By.XPATH, "(//span[contains(text(),'HH')])").click()
+        # if End_Time=='01 AM':
+            driver.find_element(By.XPATH, "(//div[contains(text(),'04')])").click()
+            time.sleep(3)
+            driver.find_element(By.XPATH, "(//span[contains(text(),'MM')])[1]").click()
+            driver.find_element(By.XPATH, "(//div[contains(text(),'00')])").click()
+            # driver.find_element(By.XPATH,"(//span[contains(text(),'AM')])").click()
+            Add_Day = driver.find_element(By.XPATH, "(//button[contains(text(),'Add Day')])").click()
+            time.sleep(10)
+
+        elif item=="Tue":
+            operating_hrs = driver.find_element(By.XPATH, "//span[@class='selected-time-text-ci']").click()
+            time.sleep(2)
+            day = driver.find_element(By.XPATH, "(//span[contains(text(),'Select Day')])[2]").click()
+
+            driver.find_element(By.XPATH,"//div[contains(text(),'Tue')]").click()
+
+            time.sleep(3)
+            start_time = driver.find_element(By.XPATH, "(//span[contains(text(),'HH')])[1]").click()
+            # if Start_time=='01 AM':
+            driver.find_element(By.XPATH, "(//div[contains(text(),'09')])").click()
+            time.sleep(3)
+            driver.find_element(By.XPATH, "(//span[contains(text(),'MM')])[1]").click()
+            driver.find_element(By.XPATH, "(//div[contains(text(),'00')])").click()
+            # driver.find_element(By.XPATH,"(//span[contains(text(),'AM')])").click()
+            end_time = driver.find_element(By.XPATH, "(//span[contains(text(),'HH')])").click()
+            # if End_Time=='01 AM':
+            driver.find_element(By.XPATH, "(//div[contains(text(),'04')])").click()
+            time.sleep(3)
+            driver.find_element(By.XPATH, "(//span[contains(text(),'MM')])[1]").click()
+            driver.find_element(By.XPATH, "(//div[contains(text(),'00')])").click()
+            # driver.find_element(By.XPATH,"(//span[contains(text(),'AM')])").click()
+            Add_Day = driver.find_element(By.XPATH, "(//button[contains(text(),'Add Day')])").click()
+            time.sleep(10)
+
+        elif item=="Wed":
+                operating_hrs = driver.find_element(By.XPATH, "//span[@class='selected-time-text-ci']").click()
+                time.sleep(2)
+                day = driver.find_element(By.XPATH, "(//span[contains(text(),'Select Day')])[2]").click()
+
+                driver.find_element(By.XPATH,"//div[contains(text(),'Wed')]").click()
+
+                time.sleep(3)
+                start_time = driver.find_element(By.XPATH, "(//span[contains(text(),'HH')])[1]").click()
+                # if Start_time=='01 AM':
+                driver.find_element(By.XPATH, "(//div[contains(text(),'09')])").click()
+                time.sleep(3)
+                driver.find_element(By.XPATH, "(//span[contains(text(),'MM')])[1]").click()
+                driver.find_element(By.XPATH, "(//div[contains(text(),'00')])").click()
+                # driver.find_element(By.XPATH,"(//span[contains(text(),'AM')])").click()
+                end_time = driver.find_element(By.XPATH, "(//span[contains(text(),'HH')])").click()
+                # if End_Time=='01 AM':
+                driver.find_element(By.XPATH, "(//div[contains(text(),'04')])").click()
+                time.sleep(3)
+                driver.find_element(By.XPATH, "(//span[contains(text(),'MM')])[1]").click()
+                driver.find_element(By.XPATH, "(//div[contains(text(),'00')])").click()
+                # driver.find_element(By.XPATH,"(//span[contains(text(),'AM')])").click()
+                Add_Day = driver.find_element(By.XPATH, "(//button[contains(text(),'Add Day')])").click()
+                time.sleep(10)
+
+        elif item=="Thu":
+                 operating_hrs = driver.find_element(By.XPATH, "//span[@class='selected-time-text-ci']").click()
+                 time.sleep(2)
+                 day = driver.find_element(By.XPATH, "(//span[contains(text(),'Select Day')])[2]").click()
+
+                 driver.find_element(By.XPATH,"//div[contains(text(),'Thu')]").click()
+
+                 time.sleep(3)
+                 start_time = driver.find_element(By.XPATH, "(//span[contains(text(),'HH')])[1]").click()
+                 # if Start_time=='01 AM':
+                 driver.find_element(By.XPATH, "(//div[contains(text(),'09')])").click()
+                 time.sleep(3)
+                 driver.find_element(By.XPATH, "(//span[contains(text(),'MM')])[1]").click()
+                 driver.find_element(By.XPATH, "(//div[contains(text(),'00')])").click()
+                 # driver.find_element(By.XPATH,"(//span[contains(text(),'AM')])").click()
+                 end_time = driver.find_element(By.XPATH, "(//span[contains(text(),'HH')])").click()
+                 # if End_Time=='01 AM':
+                 driver.find_element(By.XPATH, "(//div[contains(text(),'04')])").click()
+                 time.sleep(3)
+                 driver.find_element(By.XPATH, "(//span[contains(text(),'MM')])[1]").click()
+                 driver.find_element(By.XPATH, "(//div[contains(text(),'00')])").click()
+                 # driver.find_element(By.XPATH,"(//span[contains(text(),'AM')])").click()
+                 Add_Day = driver.find_element(By.XPATH, "(//button[contains(text(),'Add Day')])").click()
+                 time.sleep(10)
+
+        elif item == "Fri":
+                operating_hrs = driver.find_element(By.XPATH, "//span[@class='selected-time-text-ci']").click()
+                time.sleep(2)
+                day = driver.find_element(By.XPATH, "(//span[contains(text(),'Select Day')])[2]").click()
+
+                driver.find_element(By.XPATH, "//div[contains(text(),'Fr')]").click()
+
+                time.sleep(3)
+                start_time = driver.find_element(By.XPATH, "(//span[contains(text(),'HH')])[1]").click()
+                # if Start_time=='01 AM':
+                driver.find_element(By.XPATH, "(//div[contains(text(),'09')])").click()
+                time.sleep(3)
+                driver.find_element(By.XPATH, "(//span[contains(text(),'MM')])[1]").click()
+                driver.find_element(By.XPATH, "(//div[contains(text(),'00')])").click()
+                # driver.find_element(By.XPATH,"(//span[contains(text(),'AM')])").click()
+                end_time = driver.find_element(By.XPATH, "(//span[contains(text(),'HH')])").click()
+                # if End_Time=='01 AM':
+                driver.find_element(By.XPATH, "(//div[contains(text(),'04')])").click()
+                time.sleep(3)
+                driver.find_element(By.XPATH, "(//span[contains(text(),'MM')])[1]").click()
+                driver.find_element(By.XPATH, "(//div[contains(text(),'00')])").click()
+                # driver.find_element(By.XPATH,"(//span[contains(text(),'AM')])").click()
+                Add_Day = driver.find_element(By.XPATH, "(//button[contains(text(),'Add Day')])").click()
+                time.sleep(10)
+
+        elif item == "Sat":
+                 operating_hrs = driver.find_element(By.XPATH, "//span[@class='selected-time-text-ci']").click()
+                 time.sleep(2)
+                 day = driver.find_element(By.XPATH, "(//span[contains(text(),'Select Day')])[2]").click()
+
+                 driver.find_element(By.XPATH, "//div[contains(text(),'Sat')]").click()
+
+                 time.sleep(3)
+                 start_time = driver.find_element(By.XPATH, "(//span[contains(text(),'HH')])[1]").click()
+                 # if Start_time=='01 AM':
+                 driver.find_element(By.XPATH, "(//div[contains(text(),'09')])").click()
+                 time.sleep(3)
+                 driver.find_element(By.XPATH, "(//span[contains(text(),'MM')])[1]").click()
+                 driver.find_element(By.XPATH, "(//div[contains(text(),'00')])").click()
+                 # driver.find_element(By.XPATH,"(//span[contains(text(),'AM')])").click()
+                 end_time = driver.find_element(By.XPATH, "(//span[contains(text(),'HH')])").click()
+                 # if End_Time=='01 AM':
+                 driver.find_element(By.XPATH, "(//div[contains(text(),'04')])").click()
+                 time.sleep(3)
+                 driver.find_element(By.XPATH, "(//span[contains(text(),'MM')])[1]").click()
+                 driver.find_element(By.XPATH, "(//div[contains(text(),'00')])").click()
+                 # driver.find_element(By.XPATH,"(//span[contains(text(),'AM')])").click()
+                 Add_Day = driver.find_element(By.XPATH, "(//button[contains(text(),'Add Day')])").click()
+                 time.sleep(10)
+
+        elif item == "Sun":
+                operating_hrs = driver.find_element(By.XPATH, "//span[@class='selected-time-text-ci']").click()
+                time.sleep(2)
+                day = driver.find_element(By.XPATH, "(//span[contains(text(),'Select Day')])[2]").click()
+
+                driver.find_element(By.XPATH, "//div[contains(text(),'Sun')]").click()
+
+                time.sleep(3)
+                start_time = driver.find_element(By.XPATH, "(//span[contains(text(),'HH')])[1]").click()
+                # if Start_time=='01 AM':
+                driver.find_element(By.XPATH, "(//div[contains(text(),'09')])").click()
+                time.sleep(3)
+                driver.find_element(By.XPATH, "(//span[contains(text(),'MM')])[1]").click()
+                driver.find_element(By.XPATH, "(//div[contains(text(),'00')])").click()
+                # driver.find_element(By.XPATH,"(//span[contains(text(),'AM')])").click()
+                end_time = driver.find_element(By.XPATH, "(//span[contains(text(),'HH')])").click()
+                # if End_Time=='01 AM':
+                driver.find_element(By.XPATH, "(//div[contains(text(),'04')])").click()
+                time.sleep(3)
+                driver.find_element(By.XPATH, "(//span[contains(text(),'MM')])[1]").click()
+                driver.find_element(By.XPATH, "(//div[contains(text(),'00')])").click()
+                # driver.find_element(By.XPATH,"(//span[contains(text(),'AM')])").click()
+                Add_Day = driver.find_element(By.XPATH, "(//button[contains(text(),'Add Day')])").click()
+                time.sleep(10)
+
+    else:
+                print("Select day")
+
+    mainfunctions=driver.find_element(By.XPATH,"//input[@placeholder='Enter Main Function Specifics']").send_keys(Main_Function_Specifics)
+    contactname=driver.find_element(By.XPATH,"//input[@placeholder='Enter Name']").send_keys(Program_Name)
+    mailid=driver.find_element(By.XPATH,"//input[@placeholder='Enter Email ID']").send_keys(Email_ID)
+    cellnumber=driver.find_element(By.XPATH,"//input[@placeholder='Enter Cell']").send_keys(Contact_Cell)
+    AddProgram=driver.find_element(By.XPATH,"//button[contains(text(),'Add Program')]").click()
+    print("Sucessfully Program Added..")
+    submit=driver.find_element(By.XPATH,"//button[contains(text(),'Submit')]").click()
+    print("Sucessfully Added NFP..")
+AddNFP()
+
+
+
+
